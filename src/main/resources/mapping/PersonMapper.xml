@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.IDepartmentchartDao">
+	<!-- 部门查询 -->
+	<select id="queryAll" resultType="DepartmentchartPojo">
+		SELECT * FROM `departmentchart`
+	</select>
+	
+	<!-- 根据部门查询员工 -->
+	<select id="queryAll" resultMap="depart">
+		SELECT * FROM `departmentchart`
+	</select>
+	
+	<resultMap type="DepartmentchartPojo"  id="depart">
+		<id column="id"  property="id"/>
+		<collection property="staffPojos" column="id" select="fang"></collection>
+	</resultMap>
+
+	<select id="fang" resultType="StaffPojo">
+		 select * from 
+		 `staff` where id=#{0}
+	</select>
+	
+	<!-- 	删除 -->
+	<delete id="StaffDelete" parameterType="StaffPojo">
+		DELETE  FROM `staff` WHERE `id`=#{id}
+	</delete>
+</mapper>    

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div id="Rendering">
+		<h1>部门列表</h1>
+		<table>
+				<tr>
+					<td>部门编号</td>
+					<td>部门名称</td>
+					<td>部门地址</td>
+				</tr>
+			<tbody id="tbody">
+				
+			</tbody>
+			<tfoot id="tfoot"></tfoot>
+		</table>
+	</div>
+</body>
+	<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/xcConfirm.js"></script>
+<script type="text/javascript">
+	 $(function(){
+		$.ajax("http://localhost:8080/api/querAll",{
+			dataType:"json",
+			type:"get",
+			success:function(data){
+				console.log(data);
+				if(data!=null){
+					 $.each(data,function(i,obj){
+						var $row=$("<tr><td>"+obj.id+"</td><td><a herf='javascript:void(0)' class='dd' onclick='r()'>"+obj.name+"</a></td><td>"+obj.address+"</td></tr>");
+						$("#tbody").append($row);
+					}); 
+				}
+			}
+			
+		})
+	});
+	 function r(){
+		 var receive=$(this).parent().parent().find("td .dd:eq(0)").text();  
+		 alert("值："+receive);
+		 var d;
+		 if(receive=="开发部"){
+			 d=1;
+		 }else if(receive=="研发部"){
+			 d=2;
+		 }
+		 $.ajax("http://localhost:8080/api/getquer",{
+			 dataType:"json",
+				type:"get",
+				success:function(data){
+					console.log(data);
+					if(data!=null){
+						 $.each(data,function(i,obj){
+							var $rowt=$("<tr><td>"+obj.id+"</td><td>"+obj.name+"</td><td>"+obj.sex+"</td><td>"+obj.age+"</td><td>"+obj.work+"</td><td>"+obj.wages+"</td><td>"+obj.initiationtime+"</td><td>"+obj.bonus+"</td><td><a herf='javascript:void(0)' class='dle' onclick='dele()'>删除</a></td></tr>");
+							$("#tfoot").append($rowt);
+						}); 
+					}
+				}
+		 })
+	 }
+	 function dele(){
+		 var dle=$(this).parent().parent().find("td .dle:eq(0)").text();
+		 $.ajax({
+			 	url:"http://localhost:8080/api/dele/"+id,
+				dataType:"json",
+				type:"Delete",
+				contentType:"application/json",
+				data:JSON.stringify(strs),
+				success:function(data){
+					console.log(data);
+					if(data!=null){
+						 alert("删除成功");
+					}else{
+						alert("删除失败");
+					}
+				}
+		 })
+	}
+</script>
+</html>
